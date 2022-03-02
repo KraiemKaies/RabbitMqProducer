@@ -20,7 +20,7 @@ namespace RabbitMQ.Producer
                 var body = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(message));
                 channel.BasicPublish("", "demo-queue", null, body);
                 count++;
-             //   Thread.Sleep(1);
+                Thread.Sleep(100);
             }
         }
     }
