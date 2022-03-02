@@ -1,26 +1,22 @@
-﻿using System.Text;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using RabbitMQ.Client;
+using System.Text;
 
-namespace RabbitMQ.Producer
+namespace RabbitMqProducer
 {
-    public static class QueueProducer
+    public static class DirectExchangePublisher
     {
         public static void Publish(IModel channel)
         {
-            channel.QueueDeclare("demo-queue",
-                durable: true,
-                exclusive: false,
-                autoDelete: false,
-                arguments: null);
+            channel.ExchangeDeclare("demo-direct-exchange", ExchangeType.Direct);
             var count = 0;
             while (true)
             {
                 var message = new { Name = "Producer", Message = "Hello ! Count : " + count };
                 var body = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(message));
-                channel.BasicPublish("", "demo-queue", null, body);
+                channel.BasicPublish("demo-direct-exchange", "account.init", null, body);
                 count++;
-                Thread.Sleep(1000);
+                Thread.Sleep(10);
             }
         }
     }
